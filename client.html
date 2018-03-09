@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+    window.addEventListener("load", function() {
+
+        // create websocket instance
+        var mySocket = new WebSocket("ws://127.0.0.1:5000/ws");
+        // add event listener reacting when message is received
+        mySocket.onmessage = function (event) {
+            var output = document.getElementById("output");
+            var node=document.createElement("LI");
+            data = JSON.parse(event.data)
+            var textnode=document.createTextNode(data[0] + " says " + data[1] + " at " + data[2]);
+
+            node.appendChild(textnode);
+            output.appendChild(node);
+        };
+        var form = document.getElementsByClassName("foo");
+        var input = document.getElementById("input");
+
+        form[0].addEventListener("submit", function (e) {
+            // on forms submission send input to our server
+            var username = document.getElementById("username");
+            username = username.value;
+            console.log(username)
+
+            input_text = input.value;
+
+            var input_array = [username, input_text];
+
+            mySocket.send(input_array);
+            e.preventDefault()
+        })
+    });
+</script>
+
+</head>
+<body>
+    <form class="foo">
+        <label>Username: </label>
+        <input type="text" id="username" value="aditya">
+        <ul id="output"></ul>
+        <input id="input">
+        <input type="submit">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+    <!--<head>-->
+        <!--<title>WebSocket demo</title>-->
+    <!--</head>-->
+    <!--<body>-->
+        <!--<script>-->
+            <!--var ws = new WebSocket("ws://127.0.0.1:5678/"),-->
+                <!--messages = document.createElement('ul');-->
+
+            <!--ws.onmessage = function (event) {-->
+                <!--var messages = document.getElementsByTagName('ul')[0],-->
+                    <!--message = document.createElement('li'),-->
+                    <!--content = document.createTextNode('Server: ' + event.data);-->
+                <!--message.appendChild(content);-->
+                <!--messages.appendChild(message);-->
+            <!--};-->
+
+            <!--document.body.appendChild(messages);-->
+            <!---->
+            <!--function sendmsg() {-->
+                <!--text = document.getElementById('usermsg').value;-->
+                <!--ws.send(text);-->
+                <!--document.body.appendChild(text);-->
+            <!--}-->
+        <!--</script>-->
+        <!--<form name="message" onsubmit="return sendmsg()">-->
+            <!--<input name="usermsg" type="text" id="usermsg" size="60" />-->
+            <!--<input name="submitmsg" type="submit"  id="submitmsg" value="send" />-->
+        <!--</form>-->
+    <!--</body>-->
+<!--</html>-->
+
+
+
